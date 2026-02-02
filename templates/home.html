@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO / PROFILE ================= -->
+<section class="mb-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h1 class="fw-bold">{{ profile.name }}</h1>
+            <h4 class="text-secondary">{{ profile.title }}</h4>
+            <p class="mt-3">{{ profile.bio }}</p>
+
+            <div class="mt-4">
+                {% if profile.resume %}
+                    <a href="{{ profile.resume.url }}" class="btn btn-primary me-2" target="_blank">
+                        Download Resume
+                    </a>
+                {% endif %}
+                <a href="#contact" class="btn btn-outline-secondary">
+                    Contact Me
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 text-center">
+            {% if profile.image %}
+                <img src="{{ profile.image.url }}"
+                     class="img-thumbnail rounded-5 shadow border border-0 "
+                     width="220"
+                     alt="{{ profile.name }}">
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<hr class="my-5">
+
+<!-- ================= SKILLS ================= -->
+<section id="skills" class="mb-5">
+    <h2 class="mb-4">Skills</h2>
+
+    {% for skill in skills %}
+        <div class="mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+                <div class="d-flex align-items-center gap-2">
+                    
+                    {% if skill.icon %}
+                        <img src="{{ skill.icon.url }}" alt="{{ skill.name }}" width="30" height="30" class="rounded">
+                    {% endif %}
+
+                    <strong>{{ skill.name }}</strong>
+                </div>
+
+                <span>{{ skill.level }}%</span>
+            </div>
+
+            <div class="progress bg-secondary" style="height: 8px;">
+                <div class="progress-bar bg-primary"
+                     role="progressbar"
+                     style="width: {{ skill.level }}%;"
+                     aria-valuenow="{{ skill.level }}"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted">No skills added yet.</p>
+    {% endfor %}
+</section>
+
+<hr class="my-5">
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience" class="mb-5">
+    <h2 class="mb-4">Experience</h2>
+
+    <div class="list-group list-group-flush">
+        {% for exp in experiences %}
+            <div class="list-group-item bg-transparent border-secondary">
+                <h5 class="mb-1">
+                    {{ exp.role }}
+                    <span class="text-secondary">@ {{ exp.company }}</span>
+                </h5>
+
+                <small class="text-muted">
+                    {{ exp.start_date|date:"M Y" }} –
+                    {% if exp.end_date %}
+                        {{ exp.end_date|date:"M Y" }}
+                    {% else %}
+                        Present
+                    {% endif %}
+                </small>
+
+                <p class="mt-2">{{ exp.description }}</p>
+            </div>
+        {% empty %}
+            <p class="text-muted">No experience added yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<hr class="my-5">
+
+<!-- ================= PROJECTS PREVIEW ================= -->
+<section id="projects" class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Projects</h2>
+        <a href="{% url 'projects' %}" class="btn btn-outline-light btn-sm">
+            View All
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {% for project in projects|slice:":3" %}
+            <div class="col-md-4">
+                <div class="card bg-body text-body border-secondary h-100">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ project.title }}</h5>
+                        <p class="card-text">
+                            {{ project.description|truncatewords:18 }}
+                        </p>
+                    </div>
+
+                    <div class="card-footer bg-transparent border-0">
+                        <a href="{% url 'project_detail' project.id %}"
+                           class="btn btn-outline-secondary btn-sm">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">No projects added yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<hr class="my-5">
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="mb-5">
+    <h2 class="mb-4">Contact Me</h2>
+
+    <form method="post" action="{% url 'contact' %}" class="col-md-8">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <input type="text" name="name" class="form-control"
+                   placeholder="Your Name" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="email" name="email" class="form-control"
+                   placeholder="Your Email" required>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" name="subject" class="form-control"
+                   placeholder="Subject" required>
+        </div>
+
+        <div class="mb-3">
+            <textarea name="message" rows="5"
+                      class="form-control"
+                      placeholder="Your Message" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Send Message
+        </button>
+    </form>
+</section>
+
+{% endblock %}

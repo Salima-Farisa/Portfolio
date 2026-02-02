@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h1 class="fw-bold">{{ project.title }}</h1>
+
+        <img src="{{ project.image.url }}" class="img-fluid rounded my-4">
+
+        <p>{{ project.description }}</p>
+
+        <p><strong>Tech Stack:</strong> {{ project.tech_stack }}</p>
+
+        <div class="mt-3">
+            {% if project.github_url %}
+                <a href="{{ project.github_url }}" class="btn btn-outline-light me-2" target="_blank">GitHub</a>
+            {% endif %}
+            {% if project.live_url %}
+                <a href="{{ project.live_url }}" class="btn btn-primary" target="_blank">Live Demo</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
