@@ -19,7 +19,7 @@ from django.urls import path
 from django.urls import path
 from profileapp.views import home
 from projectapp.views import project_list, project_detail
-from contactapp.views import send_message
+from contactapp.views import contact
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -29,7 +29,7 @@ urlpatterns = [
     path("", home, name="home"),
     path("projects/", project_list, name="projects"),
     path("projects/<int:pk>/", project_detail, name="project_detail"),
-    path("contact/", send_message, name="contact"),
+    path("contact/", contact, name="contact"),
 ]
 
 if settings.DEBUG:
